@@ -1,4 +1,4 @@
-version: '3'
+version: '2.2'
 
 services:
   redis:
@@ -8,8 +8,6 @@ services:
     restart: always
     expose:
       - "6379"
-    ports:
-      - "6379:6379"
 
   srps:
     image: tempworks/sovren-srps:latest-1809
@@ -40,14 +38,14 @@ services:
     depends_on:
       - redis
 
-    api-email-server:
-    image: tempworks/api3-email-server:$API3_VERSION-1809
+  api-email-server:
+    image: tempworks/api3-email-server:$API3_VERSION
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_CONFIG_BASEPATH=c:\app\config
       - SERILOG_DEBUG=true
     volumes:
-      - c:/ProgramData/TempWorks/email-workingdir:c:/app/email-workingdir
+      - c:/ProgramData/TempWorks/temp/email-workingdir:c:/app/email-workingdir
       - c:/ProgramData/TempWorks/config/api-email-server:c:/app/config
     networks:
       - default
@@ -55,7 +53,7 @@ services:
     expose:
       - "80"
     ports:
-      - "55480:80"      
+      - "55480:80"
      
   api-jobservice-server:
     image: tempworks/api3-jobservice-server:$API3_VERSION
